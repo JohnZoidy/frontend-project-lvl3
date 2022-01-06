@@ -1,0 +1,26 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "RSS Agregator project",
+  "private": true,
+  "scripts": {
+    "test": "empty"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnZoidy/frontend-project-lvl3.git"
+  },
+  "author": "JohnZoidy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnZoidy/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/JohnZoidy/frontend-project-lvl3#readme",
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
