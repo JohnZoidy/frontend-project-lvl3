@@ -7,8 +7,5 @@ install:
 build:
 	npx webpack build
 
-devbuild:
-	npx webpack build
-
 lint:
 	npx eslint .

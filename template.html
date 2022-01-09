@@ -21,11 +21,18 @@
                 </div>
             </div>
             <form action="">
-                <input id="url-input">
+                <input id="url-input" autofocus required name="url" aria-label="url" class="form-control w-100"
+                    placeholder="ссылка RSS" autocomplete="off">
                 <label for="url-input">Ссылка RSS</label>
                 <button type="submit">Добавить</button>
             </form>
             <p>Пример: https://ru.hexlet.io/lessons.rss</p>
+        </section>
+        <section class="container-fluid container-xxl p-5">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 order-1 mx-auto posts"></div>
+                <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds"></div>
+            </div>
         </section>
 </body>
 
