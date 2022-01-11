@@ -1,22 +1,37 @@
+const inputField = document.getElementById('url-input');
+const mainButton = document.querySelector('[type="submit"]');
+const errorLabel = document.querySelector('.feedback');
+
 const watchers = (path, value) => {
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
-    // if url is invalid, display err
-      console.log('invalid!');
+      inputField.classList.add('is-invalid');
     }
     if (value === 'valid') {
-    // if url is correct ,disable button
-      console.log('valid!');
+      mainButton.setAttribute('disabled', '');
+      inputField.classList.remove('is-invalid');
     }
-    if (value === 'ready') {
-      // clear field and focus
+    if (value === 'success') {
+      inputField.classList.remove('is-invalid');
+      mainButton.removeAttribute('disabled');
+      inputField.value = '';
+      inputField.focus();
+      errorLabel.classList.remove('text-danger');
+      errorLabel.textContent = 'RSS succesfully loaded';
     }
     if (value === 'getError') {
       // show get err
     }
+    if (value === 'load') {
+      inputField.focus();
+    }
   }
   if (path === 'rssForm.data.currentRssData') {
     // show window and add text in feed
+  }
+  if (path === 'rssForm.error') {
+    errorLabel.classList.add('text-danger');
+    errorLabel.textContent = value;
   }
 };
 

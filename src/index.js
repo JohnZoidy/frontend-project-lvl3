@@ -1,6 +1,5 @@
-// import { Collapse, Toast, Popover } from 'bootstrap';
-// import bootstrap from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/style.css';
 import onChange from 'on-change';
 import { string } from 'yup';
 import watchers from './view.js';
@@ -9,7 +8,7 @@ const urlSchema = string().required().url();
 
 const globalState = {
   rssForm: {
-    state: 'ready',
+    state: '',
     data: {
       currentUrl: '',
       currentRssData: '',
@@ -19,19 +18,20 @@ const globalState = {
   },
 };
 
-const form = document.querySelector('form');
+const form = document.querySelector('.rss-form');
 const inputField = document.getElementById('url-input');
 
 const watchedState = onChange(globalState, watchers);
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  watchedState.rssForm.error = '';
+  globalState.rssForm.data.currentUrl = inputField.value;
   watchedState.rssForm.state = 'checking';
-  urlSchema.validate(inputField.value)
+  urlSchema.validate(globalState.rssForm.data.currentUrl)
     .then((result) => {
-      globalState.rssForm.data.currentUrl = result;
       if (globalState.rssForm.data.addedUrls.includes(result)) { // check duplicate
-        globalState.rssForm.error = 'duplicate';
+        watchedState.rssForm.error = 'Данный URL уже добавлен в список лент';
         watchedState.rssForm.state = 'invalid';
         console.log(globalState);
       } else {
@@ -41,8 +41,9 @@ form.addEventListener('submit', (e) => {
         console.log(globalState);
       }
     })
-    .catch((errorText) => {
-      globalState.rssForm.error = errorText.errors; // returns array
+    .catch((errorObj) => {
+      const [errorText] = errorObj.errors;
+      watchedState.rssForm.error = errorText; // returns array
       watchedState.rssForm.state = 'invalid';
       console.log(globalState);
     });
@@ -51,7 +52,7 @@ form.addEventListener('submit', (e) => {
       response.then((answer) => {
         if (answer.status === 200) {
           watchedState.rssForm.data.currentRssData = answer.data; // get data and show window
-          watchedState.rssForm.state = 'ready'; // clear field and focus
+          watchedState.rssForm.state = 'success'; // clear field and focus
         } else {
           watchedState.rssForm.state = 'getError';
         }
@@ -59,4 +60,7 @@ form.addEventListener('submit', (e) => {
     }
   }
   */
+  document.addEventListener('load', () => {
+    watchedState.rssForm.state = 'load';
+  });
 });

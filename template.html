@@ -8,32 +8,66 @@
     <title>Hexlet frontend project</title>
 </head>
 
-<body>
-    <script src="./src/main.js"></script>
-    <main>
-        <section>
-            <div class="container">
-                <div class="row justify-content-md-right">
-                    <h1>RSS агрегатор</h1>
-                </div>
-                <div class="row justify-content-md-right">
-                    <p>Начните читать RSS сегодня! Это легко, это красиво.</p>
-                </div>
+<body class="bg-light">
+  <main>
+    <header class="py-5 px-3 bg-secondary bg-gradient text-left">
+      <div class="container">
+        <h2>RSS читалка!</h2>
+        <p class="lead">Собери все любимые RSS ленты в одном месте!</p>
+        <form action="" class="rss-form text-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <input id="url-input" autofocus required name="url" aria-label="url" class="form-control w-100" placeholder="Введите URL адрес RSS ленты" autocomplete="off"/>
+                <label for="url-input">Введите URL адрес RSS ленты</label>
+              </div>
             </div>
-            <form action="">
-                <input id="url-input" autofocus required name="url" aria-label="url" class="form-control w-100"
-                    placeholder="ссылка RSS" autocomplete="off">
-                <label for="url-input">Ссылка RSS</label>
-                <button type="submit">Добавить</button>
-            </form>
-            <p>Пример: https://ru.hexlet.io/lessons.rss</p>
-        </section>
-        <section class="container-fluid container-xxl p-5">
-            <div class="row">
-                <div class="col-md-10 col-lg-8 order-1 mx-auto posts"></div>
-                <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds"></div>
+            <div class="col-auto">
+              <button type="submit" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5">
+                Добавить
+              </button>
             </div>
-        </section>
+          </div>
+        </form>
+        <p class="mt-2 mb-0">Пример: https://ru.hexlet.io/lessons.rss</p>
+        <p class="feedback m-0 position-absolute small text-danger"></p>
+        </div>
+    </header>
+    <div class="container">
+    <div class="py-2 row g-5">
+      <div class="col-md-5 col-lg-4 order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Your cart</span>
+          <span class="badge bg-primary rounded-pill">3</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">Product name</h6>
+              <small class="text-muted">Brief description</small>
+            </div>
+            <span class="text-muted">$12</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Billing address</h4>
+          <div class="row g-3">
+            <div class="col-12">
+              <h6 class="my-0">There's will be rss</h6>
+            </div>
+          </div>
+      </div>
+    </div>
+  </main>
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2021 Футер</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
 </body>
 
 </html>
