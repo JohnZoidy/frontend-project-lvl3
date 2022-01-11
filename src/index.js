@@ -1,10 +1,26 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.css';
+import i18n from 'i18next';
 import onChange from 'on-change';
-import { string } from 'yup';
+import { string, setLocale } from 'yup';
 import watchers from './view.js';
+import resources from './locales/ru.js';
 
-const urlSchema = string().required().url();
+const currentInstance = i18n.createInstance();
+currentInstance.init({
+  lng: 'ru',
+  debug: true,
+  resources,
+}).then(() => {
+  setLocale({
+    mixed: {
+      default: currentInstance.t('default'),
+    },
+    string: {
+      url: currentInstance.t('invalidURL'),
+    },
+  });
+});
 
 const globalState = {
   rssForm: {
@@ -25,6 +41,7 @@ const watchedState = onChange(globalState, watchers);
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  const urlSchema = string().required().url();
   watchedState.rssForm.error = '';
   globalState.rssForm.data.currentUrl = inputField.value;
   watchedState.rssForm.state = 'checking';
