@@ -6,6 +6,7 @@ const watchers = (path, value) => {
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
       inputField.classList.add('is-invalid');
+      mainButton.removeAttribute('disabled');
     }
     if (value === 'valid') {
       mainButton.setAttribute('disabled', '');
@@ -17,7 +18,7 @@ const watchers = (path, value) => {
       inputField.value = '';
       inputField.focus();
       errorLabel.classList.remove('text-danger');
-      errorLabel.textContent = 'RSS succesfully loaded';
+      errorLabel.textContent = 'RSS succesfully loaded'; // checkout later!!!
     }
     if (value === 'getError') {
       // show get err
@@ -29,7 +30,7 @@ const watchers = (path, value) => {
   if (path === 'rssForm.data.currentRssData') {
     // show window and add text in feed
   }
-  if (path === 'rssForm.error') {
+  if (path === 'rssForm.feedback') {
     errorLabel.classList.add('text-danger');
     errorLabel.textContent = value;
   }
