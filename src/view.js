@@ -5,8 +5,11 @@ const errorLabel = document.querySelector('.feedback');
 const watchers = (path, value) => {
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
-      inputField.classList.add('is-invalid');
       mainButton.removeAttribute('disabled');
+      inputField.classList.add('is-invalid');
+      errorLabel.classList.add('text-danger');
+      mainButton.removeAttribute('disabled');
+      errorLabel.classList.remove('text-success');
     }
     if (value === 'valid') {
       mainButton.setAttribute('disabled', '');
@@ -18,20 +21,16 @@ const watchers = (path, value) => {
       inputField.value = '';
       inputField.focus();
       errorLabel.classList.remove('text-danger');
-      errorLabel.textContent = 'RSS succesfully loaded'; // checkout later!!!
-    }
-    if (value === 'getError') {
-      // show get err
+      errorLabel.classList.add('text-success');
     }
     if (value === 'load') {
       inputField.focus();
     }
   }
-  if (path === 'rssForm.data.currentRssData') {
-    // show window and add text in feed
+  if (path === 'feedlist') {
+    console.log(value);
   }
   if (path === 'rssForm.feedback') {
-    errorLabel.classList.add('text-danger');
     errorLabel.textContent = value;
   }
 };

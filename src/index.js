@@ -31,17 +31,17 @@ const globalState = {
     state: '',
     data: {
       currentUrl: '',
-      currentRssData: '',
       addedUrls: [],
     },
     feedback: '',
   },
-  feedlist: {},
-  axiosResult: '',
+  feedlist: [],
+  xml: '',
 };
 
 const form = document.querySelector('.rss-form');
 const inputField = document.getElementById('url-input');
+const proxifyURL = (urlIn) => `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${urlIn}`;
 
 const watchedState = onChange(globalState, watchers);
 
@@ -59,21 +59,23 @@ form.addEventListener('submit', (e) => {
         watchedState.rssForm.state = 'invalid';
       } else {
         watchedState.rssForm.state = 'valid';
-        axios.get(result).then((response) => {
+        axios.get(proxifyURL(result)).then((response) => {
           try {
             const domParser = new DOMParser();
-            globalState.axiosResult = domParser.parseFromString(response.data);
-            console.log(globalState.axiosResult);
-            // parse(globalState.axiosResult);
-          } catch {
-            watchedState.rssForm.state = 'invalid';
+            globalState.xml = domParser.parseFromString(response.data.contents, 'application/xml');
+            watchedState.feedlist.push(parse(globalState.xml));
+            globalState.rssForm.data.addedUrls.push(globalState.rssForm.data.currentUrl);
+            watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
+            watchedState.rssForm.state = 'success';
+          } catch (eer) {
+            console.log(eer);
             watchedState.rssForm.feedback = currentInstance.t('parseError');
+            watchedState.rssForm.state = 'invalid';
           }
-          // globalState.rssForm.data.addedUrls.push(globalState.rssForm.data.currentUrl);
         }).catch((err) => {
+          watchedState.rssForm.feedback = currentInstance.t('downloadError');
           watchedState.rssForm.state = 'invalid';
           console.log(err);
-          watchedState.rssForm.feedback = currentInstance.t('downloadError');
         });
       }
     })
@@ -81,7 +83,6 @@ form.addEventListener('submit', (e) => {
       const [errorText] = errorObj.errors;
       watchedState.rssForm.feedback = errorText;
       watchedState.rssForm.state = 'invalid';
-      console.log(globalState);
     });
   document.addEventListener('load', () => {
     watchedState.rssForm.state = 'load';
