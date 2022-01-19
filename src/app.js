@@ -51,7 +51,7 @@ const app = () => {
     const urlSchema = string().required().url().notOneOf(globalState.addedUrls);
     globalState.rssForm.feedback = '';
     globalState.rssForm.currentUrl = inputField.value.trim();
-    globalState.rssForm.state = 'checking';
+    // globalState.rssForm.state = 'checking';
     urlSchema
       .validate(globalState.rssForm.currentUrl)
       .then((result) => {
@@ -61,13 +61,12 @@ const app = () => {
           .then((response) => {
             try {
               watchedState.feed = parseFeed(response);
-              globalState.postListStore.push(...globalState.feed.postList); // important!
-              watchedState.postList = globalState.feed.postList; // important!
+              globalState.postListStore.push(...globalState.feed.postList);
+              watchedState.postList = globalState.feed.postList;
               globalState.linkList.push(...globalState.feed.linkList);
               globalState.addedUrls.push(globalState.rssForm.currentUrl);
               watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
               watchedState.rssForm.state = 'success';
-              console.log(globalState);
             } catch (err) {
               console.log(err);
               watchedState.rssForm.feedback = currentInstance.t('parseError');
