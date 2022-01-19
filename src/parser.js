@@ -1,7 +1,9 @@
 import uniqueId from 'lodash/uniqueId.js';
 
-export const parseFeed = (xmldata) => {
+export const parseFeed = (responseData) => {
   try {
+    const domParser = new DOMParser();
+    const xmldata = domParser.parseFromString(responseData.data.contents, 'application/xml');
     const channel = xmldata.activeElement.querySelector('channel');
     const descriptionNode = channel.querySelector('description');
     const description = descriptionNode.parentNode === channel ? descriptionNode.textContent : '';
@@ -13,14 +15,14 @@ export const parseFeed = (xmldata) => {
       linkList: [],
     };
     channel.querySelectorAll('item').forEach((item) => {
-      const feedElement = {
+      const postElement = {
         id: uniqueId(),
-        feedName: item.querySelector('title').textContent,
-        feedDescription: item.querySelector('description').textContent,
+        postName: item.querySelector('title').textContent,
+        postDescription: item.querySelector('description').textContent,
         link: item.querySelector('link').textContent,
       };
-      feed.postList.push(feedElement);
-      feed.linkList.push(feedElement.link);
+      feed.postList.push(postElement);
+      feed.linkList.push(postElement.link);
     });
     return feed;
   } catch (e) {
@@ -29,8 +31,10 @@ export const parseFeed = (xmldata) => {
   }
 };
 
-export const parseAndCompare = (xmldata, linkList) => {
+export const parseAndCompare = (responseData, linkList) => {
   try {
+    const domParser = new DOMParser();
+    const xmldata = domParser.parseFromString(responseData.data.contents, 'application/xml');
     const result = {
       addedPostList: [],
       addedLinkList: [],
@@ -40,13 +44,13 @@ export const parseAndCompare = (xmldata, linkList) => {
       const currentLink = item.querySelector('link').textContent;
       if (!linkList.includes(currentLink)) {
         result.addedLinkList.push(currentLink);
-        const feedElement = {
+        const postElement = {
           id: uniqueId(),
-          feedName: item.querySelector('title').textContent,
-          feedDescription: item.querySelector('description').textContent,
+          postName: item.querySelector('title').textContent,
+          postDescription: item.querySelector('description').textContent,
           link: currentLink,
         };
-        result.addedPostList.push(feedElement);
+        result.addedPostList.push(postElement);
       }
     });
     return result;

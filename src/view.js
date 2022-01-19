@@ -44,16 +44,27 @@ const watchers = (path, value, previousValue) => {
     feedsList.lastChild.prepend(newFeed);
   }
   if (path === 'postList') {
-    value.forEach((feed) => {
+    value.forEach((post) => {
       const newPost = document.createElement('li');
       newPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      newPost.innerHTML = `<a href="${feed.link}" class="fw-bold" data-id="${feed.id}" target="_blank" rel="noopener noreferrer">${feed.feedName}</a>
-      <button type="button" class="btn btn-outline-primary btn-sm" data-id="${feed.id}" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
+      newPost.innerHTML = `<a href="${post.link}" class="fw-bold" data-id="${post.id}" target="_blank" rel="noopener noreferrer">${post.postName}</a>
+      <button type="button" class="btn btn-outline-primary btn-sm" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
       postList.querySelector('ul').prepend(newPost);
     });
   }
   if (path === 'rssForm.feedback') {
     errorLabel.textContent = value;
+  }
+  if (path === 'activeID') {
+    const activeHref = document.querySelector(`[data-id="${value}"]`);
+    activeHref.classList.remove('fw-bold');
+    activeHref.classList.add('link-secondary', 'fw-normal');
+  }
+  if (path === 'activeModal') {
+    const activeModal = document.getElementById('modal');
+    activeModal.querySelector('.modal-title').textContent = value.postName;
+    activeModal.querySelector('.modal-body').textContent = value.postDescription;
+    activeModal.querySelector('a').setAttribute('href', value.link);
   }
 };
 
