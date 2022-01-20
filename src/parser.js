@@ -4,7 +4,7 @@ export const parseFeed = (responseData) => {
   try {
     const domParser = new DOMParser();
     const xmldata = domParser.parseFromString(responseData.data.contents, 'application/xml');
-    const channel = xmldata.activeElement.querySelector('channel');
+    const channel = xmldata.querySelector('channel');
     const descriptionNode = channel.querySelector('description');
     const description = descriptionNode.parentNode === channel ? descriptionNode.textContent : '';
     const feed = {
@@ -39,7 +39,7 @@ export const parseAndCompare = (responseData, linkList) => {
       addedPostList: [],
       addedLinkList: [],
     };
-    const channel = xmldata.activeElement.querySelector('channel');
+    const channel = xmldata.querySelector('channel');
     channel.querySelectorAll('item').forEach((item) => {
       const currentLink = item.querySelector('link').textContent;
       if (!linkList.includes(currentLink)) {
