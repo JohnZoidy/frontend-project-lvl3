@@ -58,7 +58,7 @@ const watchers = (path, value, previousValue) => {
     errorLabel.textContent = value;
   }
   if (path === 'activeID') {
-    const activeHref = document.querySelector(`[data-id="${value}"]`);
+    const activeHref = document.querySelector(`a[data-id="${value}"]`);
     activeHref.classList.remove('fw-bold');
     activeHref.classList.add('link-secondary', 'fw-normal');
   }
