@@ -6,6 +6,7 @@ const watchers = (path, value, previousValue) => {
   const errorLabel = document.querySelector('.feedback');
   const feedsList = document.querySelector('.col-lg-4');
   const postList = document.querySelector('.col-lg-8');
+  const activeModal = document.getElementById('modal');
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
       mainButton.removeAttribute('disabled');
@@ -58,12 +59,11 @@ const watchers = (path, value, previousValue) => {
     errorLabel.textContent = value;
   }
   if (path === 'activeID') {
-    const activeHref = document.querySelector(`a[data-id="${value}"]`);
+    const activeHref = postList.querySelector(`a[data-id="${value}"]`);
     activeHref.classList.remove('fw-bold');
     activeHref.classList.add('link-secondary', 'fw-normal');
   }
   if (path === 'activeModal') {
-    const activeModal = document.getElementById('modal');
     activeModal.querySelector('.modal-title').textContent = value.postName;
     activeModal.querySelector('.modal-body').textContent = value.postDescription;
     activeModal.querySelector('a').setAttribute('href', value.link);

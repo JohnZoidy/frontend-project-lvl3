@@ -102,7 +102,6 @@ const app = () => {
   document.addEventListener('load', () => {
     watchedState.rssForm.state = 'load';
   });
-
   postListElement.addEventListener('click', (e) => {
     if (e.target.tagName === 'A' && e.target.dataset.id) {
       watchedState.activeID = e.target.dataset.id;
@@ -111,6 +110,7 @@ const app = () => {
       watchedState.activeID = e.target.dataset.id;
       const [showPost] = globalState.postListStore
         .filter((post) => post.id === e.target.dataset.id);
+      console.log(showPost);
       watchedState.activeModal = showPost;
     }
   });
