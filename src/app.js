@@ -91,7 +91,6 @@ const app = () => {
         console.log(err);
       });
     }).catch((errorObj) => {
-      console.log(errorObj.errors[0]);
       const errorText = errorObj.errors[0];
       watchedState.rssForm.feedback = errorText;
       watchedState.rssForm.state = 'invalid';
@@ -115,4 +114,4 @@ const app = () => {
   });
 };
 
-export default app;
+app();
