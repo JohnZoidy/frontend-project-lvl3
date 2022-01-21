@@ -6,7 +6,7 @@
   "scripts": {
     "test": "empty"
   },
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JohnZoidy/frontend-project-lvl3.git"

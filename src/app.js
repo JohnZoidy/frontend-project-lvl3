@@ -1,3 +1,4 @@
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import i18n from 'i18next';
 import onChange from 'on-change';
 import { string, setLocale } from 'yup';
@@ -114,4 +115,4 @@ const app = () => {
   });
 };
 
-app();
+export default app;
