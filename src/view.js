@@ -1,12 +1,11 @@
 import isEmpty from 'lodash/isEmpty.js';
 
-const inputField = document.getElementById('url-input');
-const mainButton = document.querySelector('[type="submit"]');
-const errorLabel = document.querySelector('.feedback');
-const feedsList = document.querySelector('.col-lg-4');
-const postList = document.querySelector('.col-lg-8');
-
 const watchers = (path, value, previousValue) => {
+  const inputField = document.getElementById('url-input');
+  const mainButton = document.querySelector('[type="submit"]');
+  const errorLabel = document.querySelector('.feedback');
+  const feedsList = document.querySelector('.col-lg-4');
+  const postList = document.querySelector('.col-lg-8');
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
       mainButton.removeAttribute('disabled');
