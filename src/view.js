@@ -52,7 +52,7 @@ const watchers = (path, value, previousValue) => {
       newPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
       newPost.innerHTML = `<a href="${post.link}" class="fw-bold" data-id="${post.id}" target="_blank" rel="noopener noreferrer">${post.postName}</a>
       <button type="button" class="btn btn-outline-primary btn-sm" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
-      postList.querySelector('ul').prepend(newPost);
+      postList.querySelector('ul').append(newPost);
     });
   }
   if (path === 'rssForm.feedback') {
