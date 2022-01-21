@@ -92,6 +92,7 @@ const app = () => {
         console.log(err);
       });
     }).catch((errorObj) => {
+      console.log(errorObj);
       const errorText = errorObj.errors[0];
       watchedState.rssForm.feedback = errorText;
       watchedState.rssForm.state = 'invalid';
