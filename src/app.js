@@ -22,7 +22,6 @@ const app = () => {
     activeModal: {},
     listen: true,
   };
-  let urlSchema;
   const currentInstance = i18n.createInstance();
   currentInstance.init({
     lng: 'ru',
@@ -37,7 +36,7 @@ const app = () => {
         url: currentInstance.t('invalidURL'),
       },
     });
-  }).then(() => { urlSchema = string().required().url().notOneOf(globalState.addedUrls); });
+  });
 
   const form = document.querySelector('.rss-form');
   const inputField = document.getElementById('url-input');
@@ -65,6 +64,7 @@ const app = () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    const urlSchema = string().required().url().notOneOf(globalState.addedUrls);
     globalState.rssForm.currentUrl = inputField.value.trim();
     urlSchema.validate(globalState.rssForm.currentUrl).then((result) => {
       watchedState.rssForm.state = 'valid';
@@ -91,7 +91,8 @@ const app = () => {
         console.log(err);
       });
     }).catch((errorObj) => {
-      const [errorText] = errorObj.errors;
+      console.log(errorObj.errors[0]);
+      const errorText = errorObj.errors[0];
       watchedState.rssForm.feedback = errorText;
       watchedState.rssForm.state = 'invalid';
     });
