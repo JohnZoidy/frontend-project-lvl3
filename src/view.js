@@ -9,6 +9,7 @@ const watchers = (path, value, previousValue) => {
   if (path === 'rssForm.state') {
     if (value === 'invalid') {
       mainButton.removeAttribute('disabled');
+      inputField.removeAttribute('readonly');
       inputField.classList.add('is-invalid');
       errorLabel.classList.add('text-danger');
       mainButton.removeAttribute('disabled');
@@ -16,11 +17,13 @@ const watchers = (path, value, previousValue) => {
     }
     if (value === 'valid') {
       mainButton.setAttribute('disabled', '');
+      inputField.setAttribute('readonly', true);
       inputField.classList.remove('is-invalid');
     }
     if (value === 'success') {
       inputField.classList.remove('is-invalid');
       mainButton.removeAttribute('disabled');
+      inputField.removeAttribute('readonly');
       inputField.value = '';
       inputField.focus();
       errorLabel.classList.remove('text-danger');
