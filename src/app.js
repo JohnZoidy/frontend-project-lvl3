@@ -10,7 +10,7 @@ import { parseRssChannel, getFeedData, getPostsData } from './parser.js';
 const app = () => {
   const globalState = {
     rssForm: {
-      state: '',
+      process: '',
       currentUrl: '',
       feedback: '',
     },
@@ -21,7 +21,6 @@ const app = () => {
     linkList: [],
     activeID: '',
     activeModal: {},
-    listen: true,
   };
   const currentInstance = i18n.createInstance();
   currentInstance.init({
@@ -48,8 +47,8 @@ const app = () => {
   const addPosts = (channel) => {
     const posts = getPostsData(channel, globalState.linkList);
     globalState.linkList.push(...posts.addedLinkList);
-    globalState.postListStore.push(...posts.addedPostList); // important!
-    watchedState.postList = posts.addedPostList; // important!
+    globalState.postListStore.push(...posts.addedPostList);
+    watchedState.postList = posts.addedPostList;
   };
   const listenFeed = (urlArray) => {
     urlArray.forEach((url) => {
@@ -68,7 +67,7 @@ const app = () => {
     const urlSchema = string().required().url().notOneOf(globalState.addedUrls);
     globalState.rssForm.currentUrl = inputField.value.trim();
     urlSchema.validate(globalState.rssForm.currentUrl).then((result) => {
-      watchedState.rssForm.state = 'valid';
+      watchedState.rssForm.process = 'loading';
       axios.get(proxifyURL(result)).then((response) => {
         try {
           const channel = parseRssChannel(response);
@@ -76,32 +75,27 @@ const app = () => {
           addPosts(channel);
           globalState.addedUrls.push(globalState.rssForm.currentUrl);
           watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
-          watchedState.rssForm.state = 'success';
-          if (globalState.listen) {
-            globalState.listen = false;
-            listenFeed(globalState.addedUrls);
-          }
-        } catch (err) {
+          watchedState.rssForm.process = 'success';
+          } catch (err) {
           console.log(err);
           watchedState.rssForm.feedback = currentInstance.t('parseError');
-          watchedState.rssForm.state = 'invalid';
+          watchedState.rssForm.process = 'invalid';
         }
       }).catch((err) => {
         watchedState.rssForm.feedback = currentInstance.t('downloadError');
-        watchedState.rssForm.state = 'invalid';
+        watchedState.rssForm.process = 'invalid';
         console.log(err);
       });
     }).catch((errorObj) => {
       console.log(errorObj);
       const errorText = errorObj.errors[0];
       watchedState.rssForm.feedback = errorText;
-      watchedState.rssForm.state = 'invalid';
+      watchedState.rssForm.process = 'invalid';
     });
   });
 
-  document.addEventListener('load', () => {
-    watchedState.rssForm.state = 'load';
-  });
+  document.onload = listenFeed(globalState.addedUrls);
+
   postListElement.addEventListener('click', (e) => {
     if (e.target.tagName === 'A' && e.target.dataset.id) {
       watchedState.activeID = e.target.dataset.id;
@@ -110,7 +104,6 @@ const app = () => {
       watchedState.activeID = e.target.dataset.id;
       const [showPost] = globalState.postListStore
         .filter((post) => post.id === e.target.dataset.id);
-      console.log(showPost);
       watchedState.activeModal = showPost;
     }
   });

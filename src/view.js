@@ -16,7 +16,7 @@ const watchers = (path, value, previousValue) => {
       mainButton.removeAttribute('disabled');
       errorLabel.classList.remove('text-success');
     }
-    if (value === 'valid') {
+    if (value === 'loading') {
       mainButton.setAttribute('disabled', '');
       inputField.setAttribute('readonly', true);
       inputField.classList.remove('is-invalid');
@@ -30,9 +30,6 @@ const watchers = (path, value, previousValue) => {
       errorLabel.classList.remove('text-danger');
       errorLabel.classList.add('text-success');
     }
-    if (value === 'load') {
-      inputField.focus();
-    }
   }
   if (path === 'feed' && isEmpty(previousValue)) {
     feedsList.innerHTML = `<h4 class="d-flex justify-content-between align-items-center mb-3">Фиды</h4>
@@ -43,15 +40,21 @@ const watchers = (path, value, previousValue) => {
   if (path === 'feed' && !isEmpty(value)) {
     const newFeed = document.createElement('li');
     newFeed.classList.add('list-group-item', 'justify-content-between', 'lh-sm');
-    newFeed.innerHTML = `<h6 class="my-0">${value.name}</h6><small class="text-muted">${value.description}</small>`;
+    newFeed.innerHTML = '<h6 class="my-0"></h6><small class="text-muted"></small>';
+    newFeed.firstChild.textContent = value.name;
+    newFeed.lastChild.textContent = value.description;
     feedsList.lastChild.prepend(newFeed);
   }
   if (path === 'postList') {
     value.forEach((post) => {
       const newPost = document.createElement('li');
       newPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      newPost.innerHTML = `<a href="${post.link}" class="fw-bold" data-id="${post.id}" target="_blank" rel="noopener noreferrer">${post.postName}</a>
-      <button type="button" class="btn btn-outline-primary btn-sm" data-id="${post.id}" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
+      newPost.innerHTML = `<a class="fw-bold" target="_blank" rel="noopener noreferrer"></a>
+      <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
+      newPost.firstChild.setAttribute('href', post.link);
+      newPost.firstChild.setAttribute('data-id', post.id);
+      newPost.firstChild.textContent = post.postName;
+      newPost.lastChild.setAttribute('data-id', post.id);
       postList.querySelector('ul').append(newPost);
     });
   }
