@@ -76,7 +76,7 @@ const app = () => {
           globalState.addedUrls.push(globalState.rssForm.currentUrl);
           watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
           watchedState.rssForm.process = 'success';
-          } catch (err) {
+        } catch (err) {
           console.log(err);
           watchedState.rssForm.feedback = currentInstance.t('parseError');
           watchedState.rssForm.process = 'invalid';

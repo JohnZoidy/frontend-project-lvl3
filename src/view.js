@@ -7,7 +7,7 @@ const watchers = (path, value, previousValue) => {
   const feedsList = document.querySelector('.col-lg-4');
   const postList = document.querySelector('.col-lg-8');
   const activeModal = document.getElementById('modal');
-  if (path === 'rssForm.state') {
+  if (path === 'rssForm.process') {
     if (value === 'invalid') {
       mainButton.removeAttribute('disabled');
       inputField.removeAttribute('readonly');
