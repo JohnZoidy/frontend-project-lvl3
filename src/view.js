@@ -45,7 +45,7 @@ const watchers = (path, value, previousValue) => {
     newFeed.lastChild.textContent = value.description;
     feedsList.lastChild.prepend(newFeed);
   }
-  if (path === 'postList') {
+  if (path === 'newPoststList') {
     value.forEach((post) => {
       const newPost = document.createElement('li');
       newPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');

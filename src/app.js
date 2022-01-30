@@ -14,9 +14,9 @@ const app = () => {
       currentUrl: '',
       feedback: '',
     },
-    addedUrls: [],
+    addedFeedsUrls: [],
     feed: {},
-    postList: [],
+    newPoststList: [],
     postListStore: [],
     linkList: [],
     activeID: '',
@@ -48,23 +48,26 @@ const app = () => {
     const posts = getPostsData(channel, globalState.linkList);
     globalState.linkList.push(...posts.addedLinkList);
     globalState.postListStore.push(...posts.addedPostList);
-    watchedState.postList = posts.addedPostList;
+    watchedState.newPoststList = posts.addedPostList;
   };
+
   const listenFeed = (urlArray) => {
-    urlArray.forEach((url) => {
-      axios.get(proxifyURL(url)).then((response) => {
-        const channel = parseRssChannel(response);
-        addPosts(channel);
-      }).catch((err) => {
-        throw new Error(err);
+    const handler = Promise.resolve();
+    handler.then(() => {
+      urlArray.forEach((url) => {
+        axios.get(proxifyURL(url)).then((response) => {
+          const channel = parseRssChannel(response);
+          addPosts(channel);
+        }).catch((err) => {
+          throw new Error(err);
+        });
       });
-    });
-    setTimeout(() => listenFeed(urlArray), 5000);
+    }).then(() => setTimeout(() => listenFeed(urlArray), 5000));
   };
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const urlSchema = string().required().url().notOneOf(globalState.addedUrls);
+    const urlSchema = string().required().url().notOneOf(globalState.addedFeedsUrls);
     globalState.rssForm.currentUrl = inputField.value.trim();
     urlSchema.validate(globalState.rssForm.currentUrl).then((result) => {
       watchedState.rssForm.process = 'loading';
@@ -73,7 +76,7 @@ const app = () => {
           const channel = parseRssChannel(response);
           watchedState.feed = getFeedData(channel);
           addPosts(channel);
-          globalState.addedUrls.push(globalState.rssForm.currentUrl);
+          globalState.addedFeedsUrls.push(globalState.rssForm.currentUrl);
           watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
           watchedState.rssForm.process = 'success';
         } catch (err) {
@@ -94,7 +97,7 @@ const app = () => {
     });
   });
 
-  document.onload = listenFeed(globalState.addedUrls);
+  document.onload = listenFeed(globalState.addedFeedsUrls);
 
   postListElement.addEventListener('click', (e) => {
     if (e.target.tagName === 'A' && e.target.dataset.id) {
