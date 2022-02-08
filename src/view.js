@@ -41,7 +41,7 @@ const watchers = (path, value, previousValue) => {
     const newFeed = document.createElement('li');
     newFeed.classList.add('list-group-item', 'justify-content-between', 'lh-sm');
     newFeed.innerHTML = '<h6 class="my-0"></h6><small class="text-muted"></small>';
-    newFeed.firstChild.textContent = value.name;
+    newFeed.firstChild.textContent = value.title;
     newFeed.lastChild.textContent = value.description;
     feedsList.lastChild.prepend(newFeed);
   }
@@ -52,7 +52,7 @@ const watchers = (path, value, previousValue) => {
     <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`;
     newPost.firstChild.setAttribute('href', value.link);
     newPost.firstChild.setAttribute('data-id', value.id);
-    newPost.firstChild.textContent = value.postName;
+    newPost.firstChild.textContent = value.postTitle;
     newPost.lastChild.setAttribute('data-id', value.id);
     postList.querySelector('ul').append(newPost);
   }

@@ -1,8 +1,9 @@
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import i18n from 'i18next';
+import { createInstance } from 'i18next';
 import onChange from 'on-change';
 import { string, setLocale } from 'yup';
-import axios from 'axios';
+import { get } from 'axios';
+import uniqueId from 'lodash/uniqueId.js';
 import watchers from './view.js';
 import resources from './locales/ru.js';
 import parseRssChannel from './parser.js';
@@ -24,18 +25,18 @@ const app = () => {
       activeModal: {},
     },
   };
-  const currentInstance = i18n.createInstance();
+  const currentInstance = createInstance();
   currentInstance.init({
     lng: 'ru',
     resources,
   }).then(() => {
     setLocale({
       mixed: {
-        notOneOf: currentInstance.t('duplicate'),
-        required: currentInstance.t('required'),
+        notOneOf: 'duplicate',
+        required: 'required',
       },
       string: {
-        url: currentInstance.t('invalidURL'),
+        url: 'invalidURL',
       },
     });
   });
@@ -53,21 +54,23 @@ const app = () => {
 
   const watchedState = onChange(globalState, watchers);
   const addPosts = (posts) => {
-    globalState.linkList.push(...posts.addedLinkList);
-    globalState.postListStore.push(...posts.addedPostList);
-    posts.addedPostIDs.forEach((postID) => {
-      [watchedState.stateUI.newPost] = globalState.postListStore
-        .filter((post) => post.id === postID);
+    posts.forEach((post) => {
+      if (!globalState.linkList.includes(post.link)) {
+        const postWithId = { ...post, id: uniqueId() };
+        globalState.linkList.push(post.link);
+        globalState.postListStore.push(postWithId);
+        watchedState.stateUI.newPost = postWithId;
+      }
     });
   };
 
   const listenFeed = (urlArray) => {
-    const promises = urlArray.map((url) => axios.get(proxifyURL(url)).catch((e) => console.log(e)));
+    const promises = urlArray.map((url) => get(proxifyURL(url)).catch((e) => console.log(e)));
     const results = Promise.all(promises);
     results.then((responses) => {
       responses.forEach((response) => {
         if (response) {
-          const rssData = parseRssChannel(response, globalState.linkList);
+          const rssData = parseRssChannel(response);
           addPosts(rssData.posts);
         }
       });
@@ -80,16 +83,15 @@ const app = () => {
     globalState.rssForm.currentUrl = inputField.value.trim();
     urlSchema.validate(globalState.rssForm.currentUrl).then((result) => {
       watchedState.rssForm.process = 'loading';
-      axios.get(proxifyURL(result)).then((response) => {
+      get(proxifyURL(result)).then((response) => {
         try {
-          const rssData = parseRssChannel(response, globalState.linkList);
+          const rssData = parseRssChannel(response);
           watchedState.stateUI.feed = rssData.feed;
           addPosts(rssData.posts);
           globalState.addedFeedsUrls.push(globalState.rssForm.currentUrl);
           watchedState.rssForm.feedback = currentInstance.t('downloadSuccess');
           watchedState.rssForm.process = 'success';
         } catch (err) {
-          console.log(err);
           watchedState.rssForm.feedback = currentInstance.t('parseError');
           watchedState.rssForm.process = 'invalid';
         }
@@ -101,7 +103,7 @@ const app = () => {
     }).catch((errorObj) => {
       console.log(errorObj);
       const errorText = errorObj.errors[0];
-      watchedState.rssForm.feedback = errorText;
+      watchedState.rssForm.feedback = currentInstance.t(errorText);
       watchedState.rssForm.process = 'invalid';
     });
   });
