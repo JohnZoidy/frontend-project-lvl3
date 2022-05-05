@@ -46,7 +46,7 @@ const app = () => {
   const postListElement = document.querySelector('.col-lg-8');
 
   const proxifyURL = (urlIn) => {
-    const result = new URL('https://hexlet-allorigins.herokuapp.com/get');
+    const result = new URL('https://allorigins.hexlet.app/get');
     result.searchParams.set('disableCache', 'true');
     result.searchParams.set('url', urlIn);
     return result.href;
